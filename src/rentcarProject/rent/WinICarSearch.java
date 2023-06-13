@@ -77,7 +77,7 @@ public class WinICarSearch extends JDialog {
 	public String getCindex() {
 		return cindex;
 	}
-
+  
 	public void setCindex(String cindex) {
 		this.cindex = cindex;
 	}
