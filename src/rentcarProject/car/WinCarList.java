@@ -1,4 +1,4 @@
-package rentcarProject.member;
+package rentcarProject.car;
 
 import java.awt.EventQueue;
 
@@ -31,7 +31,7 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class WinMemberList extends JDialog {
+public class WinCarList extends JDialog {
 	private JTable tableMemberList;
 	private JTextField tfSearchword;
 	private DefaultTableModel dtm;
@@ -44,7 +44,7 @@ public class WinMemberList extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WinMemberList dialog = new WinMemberList();
+					WinCarList dialog = new WinCarList();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -57,21 +57,22 @@ public class WinMemberList extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public WinMemberList() {
+	public WinCarList() {
 		addWindowFocusListener(new WindowFocusListener() {
 			
 			public void windowGainedFocus(WindowEvent e) {
-				String columns[] = {"회원아이디","회원비밀번호","회원이름","회원전화번호","회원이메일","회원가입일"};
+				String columns[] = {"차량고유식별번호","차량브랜드","차종","차량명칭","차량색상","차량유종","차량기어타입","단위비용/일","차량이미지","비고"};
 				
 				dtm = (DefaultTableModel)tableMemberList.getModel();
 				dtm.setColumnIdentifiers(columns);
 				
 			}
 			public void windowLostFocus(WindowEvent e) {
+				
 			}
 		});
-		setTitle("회원정보 리스트");
-		setBounds(100, 100, 583, 356);
+		setTitle("차량정보 리스트");
+		setBounds(100, 100, 1002, 356);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -85,7 +86,7 @@ public class WinMemberList extends JDialog {
 		getContentPane().add(panel, BorderLayout.NORTH);
 		
 		JComboBox cbKeyword = new JComboBox();
-		cbKeyword.setModel(new DefaultComboBoxModel(new String[] {"아이디", "이름", "이메일"}));
+		cbKeyword.setModel(new DefaultComboBoxModel(new String[] {"차량명칭", "차량브랜드", "차종"}));
 		panel.add(cbKeyword);
 		
 		tfSearchword = new JTextField();
@@ -95,17 +96,17 @@ public class WinMemberList extends JDialog {
 		JButton btnSearch = new JButton("검색");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showMemberListKeyword(dtm, cbKeyword.getSelectedItem().toString(), tfSearchword.getText());
+				showCarListKeyword(dtm, cbKeyword.getSelectedItem().toString(), tfSearchword.getText());
 			}
 		});
 		panel.add(btnSearch);
 		
-		JButton btnJoin = new JButton("회원 등록");
+		JButton btnJoin = new JButton("차량 등록");
 		btnJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			WinMemberJoin winJoin = new WinMemberJoin();
-			winJoin.setModal(true);
-			winJoin.setVisible(true);
+			WinCarInsert winCarInsert = new WinCarInsert();
+			winCarInsert.setModal(true);
+			winCarInsert.setVisible(true);
 			DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
 			dtm2.setRowCount(0);
 			}
@@ -119,10 +120,10 @@ public class WinMemberList extends JDialog {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row =tableMemberList.getSelectedRow();
-				String rid = tableMemberList.getValueAt(row, 0).toString();
-				WinMemberUpdate winMemberUpdate = new WinMemberUpdate(rid);
-				winMemberUpdate.setModal(true);
-				winMemberUpdate.setVisible(true);
+				String cindex = tableMemberList.getValueAt(row, 0).toString();
+				WinCarUpdate winCarUpdate = new WinCarUpdate(cindex);
+				winCarUpdate.setModal(true);
+				winCarUpdate.setVisible(true);
 				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
 				dtm2.setRowCount(0);
 				
@@ -134,8 +135,8 @@ public class WinMemberList extends JDialog {
 		btmDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row =tableMemberList.getSelectedRow();
-				String rid = tableMemberList.getValueAt(row, 0).toString();
-				memberDelete(rid);
+				String cindex = tableMemberList.getValueAt(row, 0).toString();
+				carDelete(cindex);
 				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
 				dtm2.setRowCount(0);
 			}
@@ -146,21 +147,20 @@ public class WinMemberList extends JDialog {
 
 	
 
-	protected void memberDelete(String rid) {
+	protected void carDelete(String cindex) {
 		// TODO Auto-generated method stub
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 	        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","1234");
 	        
 				
-				String sql = "delete from rMember where rid =?";
+				String sql = "delete from cartbl where cindex =?";
 				
 				PreparedStatement pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, rid);
+				pstmt.setString(1, cindex);
 				int deleteCheck = pstmt.executeUpdate();
 				if(deleteCheck == 1) {
 					DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
-					
 					dtm2.setRowCount(0);
 					
 				}
@@ -173,19 +173,19 @@ public class WinMemberList extends JDialog {
 		
 	}
 
-	protected void showMemberListKeyword(DefaultTableModel dtm, String keyword, String searchWord) {
+	protected void showCarListKeyword(DefaultTableModel dtm, String keyword, String searchWord) {
 		// TODO Auto-generated method stub
 		String sql = "";
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 	        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","1234");
 	        
-				if(keyword.equals("아이디")) {
-					sql = "SELECT * FROM rMember where rid Like ?";
-				}else if(keyword.equals("이름")) {
-					sql = "SELECT * FROM rMember where rname Like ?";
-				}else if(keyword.equals("이메일")) {
-					sql = "SELECT * FROM rMember where remail Like ?";
+				if(keyword.equals("차량명칭")) {
+					sql = "SELECT * FROM cartbl where UPPER(cname) Like UPPER(?)";
+				}else if(keyword.equals("차량브랜드")) {
+					sql = "SELECT * FROM cartbl where UPPER(cbrend) Like UPPER(?)";
+				}else if(keyword.equals("차종")) {
+					sql = "SELECT * FROM cartbl where UPPER(cclass) Like UPPER(?)";
 				}
 				PreparedStatement pstmt = con.prepareStatement(sql);
 				pstmt.setString(1,'%'+searchWord+'%');
@@ -200,7 +200,7 @@ public class WinMemberList extends JDialog {
 				
 				while(rs.next()) {
 					Vector<String> vector = new Vector<String>();
-					for(int i=1; i<=6; i++) {
+					for(int i=1; i<=10; i++) {
 						vector.add(rs.getString(i));
 					}
 					dtm.addRow(vector);

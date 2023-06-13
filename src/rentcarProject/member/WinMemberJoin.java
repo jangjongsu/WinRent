@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
@@ -67,6 +69,11 @@ public class WinMemberJoin extends JDialog {
 		getContentPane().add(tfId);
 		
 		JButton btnNewButton = new JButton("중복확인");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				idCheck(tfId.getText());
+			}
+		});
 		btnNewButton.setFont(new Font("굴림", Font.PLAIN, 15));
 		btnNewButton.setBounds(96, 108, 241, 32);
 		getContentPane().add(btnNewButton);
@@ -88,6 +95,7 @@ public class WinMemberJoin extends JDialog {
 		getContentPane().add(lblPw_1_1);
 		
 		tfName = new JTextField();
+		tfName.setEnabled(false);
 		tfName.setColumns(10);
 		tfName.setBounds(96, 212, 241, 21);
 		getContentPane().add(tfName);
@@ -97,6 +105,7 @@ public class WinMemberJoin extends JDialog {
 		getContentPane().add(lblmobile);
 		
 		tfMobile = new JTextField();
+		tfMobile.setEnabled(false);
 		tfMobile.setColumns(10);
 		tfMobile.setBounds(96, 243, 241, 21);
 		getContentPane().add(tfMobile);
@@ -106,6 +115,7 @@ public class WinMemberJoin extends JDialog {
 		getContentPane().add(lblEmail);
 		
 		tfEmail = new JTextField();
+		tfEmail.setEnabled(false);
 		tfEmail.setColumns(10);
 		tfEmail.setBounds(96, 274, 109, 21);
 		getContentPane().add(tfEmail);
@@ -131,13 +141,51 @@ public class WinMemberJoin extends JDialog {
 		getContentPane().add(cbEmail);
 		
 		tfPw = new JPasswordField();
+		tfPw.setEnabled(false);
 		tfPw.setBounds(96, 150, 241, 21);
 		getContentPane().add(tfPw);
 		
 		tfPw2 = new JPasswordField();
+		tfPw2.setEnabled(false);
 		tfPw2.setBounds(96, 181, 241, 21);
 		getContentPane().add(tfPw2);
 
+	}
+
+	protected void idCheck(String rid) {
+		// TODO Auto-generated method stub
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+	        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","1234");
+			
+				String sql = "SELECT count(*) FROM rMember where rid = ?";
+				
+				PreparedStatement pstmt = con.prepareStatement(sql);
+				
+				pstmt.setNString(1, rid);
+				ResultSet rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					if(rs.getInt("count(*)") == 1) {
+						JOptionPane.showMessageDialog(null, "중복된 아이디 입니다.");
+					}else {
+						JOptionPane.showMessageDialog(null, "사용 가능한 아이디 입니다.");
+						setJoin();
+					}
+				}
+			}catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			}
+	}
+
+	private void setJoin() {
+		// TODO Auto-generated method stub
+		tfPw.setEnabled(true);
+		tfPw2.setEnabled(true);
+		tfName.setEnabled(true);
+		tfMobile.setEnabled(true);
+		tfEmail.setEnabled(true);
 	}
 
 	protected void memberJoin() {

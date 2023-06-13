@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
+import rentcarProject.car.WinCarList;
 import rentcarProject.member.WinMemberList;
 
 import java.awt.event.ActionListener;
@@ -48,13 +49,19 @@ public class WinMain extends JDialog {
 				WinMemberList winMemberList = new WinMemberList();
 				winMemberList.setModal(true);
 				winMemberList.setVisible(true);
-				
 			}
 		});
 		btnMember.setBounds(12, 10, 410, 62);
 		panel.add(btnMember);
 		
 		JButton btnCar = new JButton("차량관리");
+		btnCar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinCarList winCarList = new WinCarList();
+				winCarList.setModal(true);
+				winCarList.setVisible(true);
+			}
+		});
 		btnCar.setBounds(12, 82, 410, 62);
 		panel.add(btnCar);
 		
