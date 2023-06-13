@@ -95,7 +95,7 @@ public class WinMemberList extends JDialog {
 		JButton btnSearch = new JButton("검색");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showRecordsKeyword(dtm, cbKeyword.getSelectedItem().toString(), tfSearchword.getText());
+				showMemberListKeyword(dtm, cbKeyword.getSelectedItem().toString(), tfSearchword.getText());
 			}
 		});
 		panel.add(btnSearch);
@@ -103,7 +103,7 @@ public class WinMemberList extends JDialog {
 		JButton btnJoin = new JButton("회원 등록");
 		btnJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			WinJoin winJoin = new WinJoin();
+			WinMemberJoin winJoin = new WinMemberJoin();
 			winJoin.setModal(true);
 			winJoin.setVisible(true);
 			}
@@ -114,6 +114,16 @@ public class WinMemberList extends JDialog {
 		addPopup(tableMemberList, popupMenu);
 		
 		JMenuItem btnUpdate = new JMenuItem("수정");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row =tableMemberList.getSelectedRow();
+				String rid = tableMemberList.getValueAt(row, 0).toString();
+				WinMemberUpdate winMemberUpdate = new WinMemberUpdate(rid);
+				winMemberUpdate.setModal(true);
+				winMemberUpdate.setVisible(true);
+				
+			}
+		});
 		popupMenu.add(btnUpdate);
 		
 		JMenuItem btmDelete = new JMenuItem("삭제");
@@ -121,29 +131,7 @@ public class WinMemberList extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				int row =tableMemberList.getSelectedRow();
 				String rid = tableMemberList.getValueAt(row, 0).toString();
-				try {
-					Class.forName("oracle.jdbc.driver.OracleDriver");
-			        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","1234");
-			        
-						
-						String sql = "delete from rMember where rid =?";
-						
-						PreparedStatement pstmt = con.prepareStatement(sql);
-						pstmt.setString(1, rid);
-						int deleteCheck = pstmt.executeUpdate();
-						if(deleteCheck == 1) {
-							DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
-							
-							dtm2.setRowCount(0);
-							
-						}
-							
-						
-					}	 catch (ClassNotFoundException | SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					}
-				
+				memberDelete(rid);
 			}
 		});
 		popupMenu.add(btmDelete);
@@ -152,7 +140,34 @@ public class WinMemberList extends JDialog {
 
 	
 
-	protected void showRecordsKeyword(DefaultTableModel dtm, String keyword, String searchWord) {
+	protected void memberDelete(String rid) {
+		// TODO Auto-generated method stub
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+	        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","1234");
+	        
+				
+				String sql = "delete from rMember where rid =?";
+				
+				PreparedStatement pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, rid);
+				int deleteCheck = pstmt.executeUpdate();
+				if(deleteCheck == 1) {
+					DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
+					
+					dtm2.setRowCount(0);
+					
+				}
+					
+				
+			}	 catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			}
+		
+	}
+
+	protected void showMemberListKeyword(DefaultTableModel dtm, String keyword, String searchWord) {
 		// TODO Auto-generated method stub
 		String sql = "";
 		try {
@@ -193,7 +208,7 @@ public class WinMemberList extends JDialog {
 		
 	}
 
-	protected void showRecords(DefaultTableModel dtm) {
+	protected void showMemberList(DefaultTableModel dtm) {
 		// TODO Auto-generated method stub
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
