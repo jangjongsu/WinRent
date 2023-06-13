@@ -32,7 +32,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class WinCarList extends JDialog {
-	private JTable tableMemberList;
+	private JTable tableCarList;
 	private JTextField tfSearchword;
 	private DefaultTableModel dtm;
 	private JPopupMenu popupMenu;
@@ -63,7 +63,7 @@ public class WinCarList extends JDialog {
 			public void windowGainedFocus(WindowEvent e) {
 				String columns[] = {"차량고유식별번호","차량브랜드","차종","차량명칭","차량색상","차량유종","차량기어타입","단위비용/일","차량이미지","비고"};
 				
-				dtm = (DefaultTableModel)tableMemberList.getModel();
+				dtm = (DefaultTableModel)tableCarList.getModel();
 				dtm.setColumnIdentifiers(columns);
 				
 			}
@@ -77,8 +77,8 @@ public class WinCarList extends JDialog {
 		JScrollPane scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
-		tableMemberList = new JTable();
-		scrollPane.setViewportView(tableMemberList);
+		tableCarList = new JTable();
+		scrollPane.setViewportView(tableCarList);
 		
 				
 		
@@ -107,24 +107,24 @@ public class WinCarList extends JDialog {
 			WinCarInsert winCarInsert = new WinCarInsert();
 			winCarInsert.setModal(true);
 			winCarInsert.setVisible(true);
-			DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
+			DefaultTableModel dtm2 = (DefaultTableModel)tableCarList.getModel();
 			dtm2.setRowCount(0);
 			}
 		});
 		panel.add(btnJoin);
 		
 		popupMenu = new JPopupMenu();
-		addPopup(tableMemberList, popupMenu);
+		addPopup(tableCarList, popupMenu);
 		
 		JMenuItem btnUpdate = new JMenuItem("수정");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int row =tableMemberList.getSelectedRow();
-				String cindex = tableMemberList.getValueAt(row, 0).toString();
+				int row =tableCarList.getSelectedRow();
+				String cindex = tableCarList.getValueAt(row, 0).toString();
 				WinCarUpdate winCarUpdate = new WinCarUpdate(cindex);
 				winCarUpdate.setModal(true);
 				winCarUpdate.setVisible(true);
-				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
+				DefaultTableModel dtm2 = (DefaultTableModel)tableCarList.getModel();
 				dtm2.setRowCount(0);
 				
 			}
@@ -134,10 +134,10 @@ public class WinCarList extends JDialog {
 		JMenuItem btmDelete = new JMenuItem("삭제");
 		btmDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int row =tableMemberList.getSelectedRow();
-				String cindex = tableMemberList.getValueAt(row, 0).toString();
+				int row =tableCarList.getSelectedRow();
+				String cindex = tableCarList.getValueAt(row, 0).toString();
 				carDelete(cindex);
-				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
+				DefaultTableModel dtm2 = (DefaultTableModel)tableCarList.getModel();
 				dtm2.setRowCount(0);
 			}
 		});
@@ -160,7 +160,7 @@ public class WinCarList extends JDialog {
 				pstmt.setString(1, cindex);
 				int deleteCheck = pstmt.executeUpdate();
 				if(deleteCheck == 1) {
-					DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
+					DefaultTableModel dtm2 = (DefaultTableModel)tableCarList.getModel();
 					dtm2.setRowCount(0);
 					
 				}
@@ -192,7 +192,7 @@ public class WinCarList extends JDialog {
 				ResultSet rs = pstmt.executeQuery();
 				
 				
-				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
+				DefaultTableModel dtm2 = (DefaultTableModel)tableCarList.getModel();
 				
 				dtm2.setRowCount(0);
 				
@@ -226,7 +226,7 @@ public class WinCarList extends JDialog {
 				
 				ResultSet rs = pstmt.executeQuery();
 				
-				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
+				DefaultTableModel dtm2 = (DefaultTableModel)tableCarList.getModel();
 				dtm2.setRowCount(0);
 				
 				int count = 0;
