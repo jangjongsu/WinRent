@@ -8,7 +8,6 @@ import java.awt.BorderLayout;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.mysql.cj.result.Row;
 
 import java.awt.event.WindowFocusListener;
 import java.sql.Connection;

@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import rentcarProject.car.WinCarList;
 import rentcarProject.member.WinMemberList;
+import rentcarProject.rent.WinRentList;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -66,6 +67,13 @@ public class WinMain extends JDialog {
 		panel.add(btnCar);
 		
 		JButton btnReservation = new JButton("예약관리");
+		btnReservation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinRentList winRentList = new WinRentList();
+				winRentList.setModal(true);
+				winRentList.setVisible(true);
+			}
+		});
 		btnReservation.setBounds(12, 154, 410, 62);
 		panel.add(btnReservation);
 
