@@ -53,6 +53,7 @@ public class WinMemberJoin extends JDialog {
 	 * Create the dialog.
 	 */
 	public WinMemberJoin() {
+		setTitle("회원정보 등록");
 		setBounds(100, 100, 383, 411);
 		getContentPane().setLayout(null);
 		

@@ -51,6 +51,7 @@ public class WinMemberUpdate extends JDialog {
 	 * Create the dialog.
 	 */
 	public WinMemberUpdate() {
+		setTitle("회원 정보 변경");
 		setBounds(100, 100, 383, 309);
 		getContentPane().setLayout(null);
 		

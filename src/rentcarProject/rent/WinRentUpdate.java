@@ -1,18 +1,13 @@
 package rentcarProject.rent;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 
 
-import rentcarProject.member.WinMemberList;
 import rentcarProject.util.Win_calendar;
 
 import javax.swing.JLabel;
