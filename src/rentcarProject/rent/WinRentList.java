@@ -134,8 +134,8 @@ public class WinRentList extends JDialog {
 		btmDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row =tableMemberList.getSelectedRow();
-				String cindex = tableMemberList.getValueAt(row, 0).toString();
-				carDelete(cindex);
+				String rtnum = tableMemberList.getValueAt(row, 0).toString();
+				rentDelete(rtnum);
 				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
 				dtm2.setRowCount(0);
 			}
@@ -146,17 +146,17 @@ public class WinRentList extends JDialog {
 
 	
 
-	protected void carDelete(String cindex) {
+	protected void rentDelete(String rtnum) {
 		// TODO Auto-generated method stub
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 	        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","1234");
 	        
 				
-				String sql = "delete from cartbl where cindex =?";
+				String sql = "delete from rReservation where rtnum =?";
 				
 				PreparedStatement pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, cindex);
+				pstmt.setString(1, rtnum);
 				int deleteCheck = pstmt.executeUpdate();
 				if(deleteCheck == 1) {
 					DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();

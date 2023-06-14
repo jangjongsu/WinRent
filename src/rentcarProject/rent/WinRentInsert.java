@@ -2,7 +2,9 @@ package rentcarProject.rent;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -16,14 +18,22 @@ import rentcarProject.util.Win_calendar;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JTextArea;
 
 public class WinRentInsert extends JDialog {
 	private JTextField tfId;
-	private JTextField textField;
+	private JTextField tfCindex;
 	private JTextField tfRtdate;
 	private JTextField tfReturndate;
 	private JButton btnCal1;
@@ -32,10 +42,13 @@ public class WinRentInsert extends JDialog {
 	private JTextField tfCoil;
 	private JTextField tfCcolor;
 	private JTextField tfCclass;
-	private JTextField tfCbend;
+	private JTextField tfCbrend;
 	private JTextField tfCname;
 	private JButton btnCal2;
 	private JButton btnUpCar;
+	private JTextArea tfCnote;
+	private JLabel lblCimg;
+
 
 	/**
 	 * Launch the application.
@@ -91,11 +104,11 @@ public class WinRentInsert extends JDialog {
 			getContentPane().add(lbCindex);
 		}
 		{
-			textField = new JTextField();
-			textField.setEnabled(false);
-			textField.setColumns(10);
-			textField.setBounds(102, 97, 139, 21);
-			getContentPane().add(textField);
+			tfCindex = new JTextField();
+			tfCindex.setEnabled(false);
+			tfCindex.setColumns(10);
+			tfCindex.setBounds(102, 97, 139, 21);
+			getContentPane().add(tfCindex);
 		}
 		{
 			btnUpCar = new JButton("차량 조회");
@@ -104,10 +117,11 @@ public class WinRentInsert extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					String rtdate = tfRtdate.getText();
 					String returndate = tfReturndate.getText();
-					WinICarSearch winICarSearch = new WinICarSearch(rtdate, returndate);
-					winICarSearch.setVisible(true);
-					winICarSearch.setModal(true);
-					
+					WinCarSearch winCarSearch = new WinCarSearch(rtdate, returndate);
+					winCarSearch.setModal(true);
+					winCarSearch.setVisible(true);
+					tfCindex.setText(winCarSearch.getCindex());
+					carView(winCarSearch.getCindex());
 				}
 			});
 			btnUpCar.setBounds(253, 96, 133, 23);
@@ -178,8 +192,7 @@ public class WinRentInsert extends JDialog {
 			getContentPane().add(btnCal2);
 		}
 		
-		JLabel lblCimg = new JLabel("");
-		lblCimg.setEnabled(false);
+		lblCimg = new JLabel("");
 		lblCimg.setOpaque(true);
 		lblCimg.setBackground(Color.WHITE);
 		lblCimg.setBounds(12, 131, 150, 201);
@@ -189,7 +202,7 @@ public class WinRentInsert extends JDialog {
 		lblCname_6_1.setBounds(12, 342, 528, 15);
 		getContentPane().add(lblCname_6_1);
 		
-		JTextArea tfCnote = new JTextArea();
+		tfCnote = new JTextArea();
 		tfCnote.setEnabled(false);
 		tfCnote.setBounds(58, 342, 482, 108);
 		getContentPane().add(tfCnote);
@@ -224,11 +237,11 @@ public class WinRentInsert extends JDialog {
 		tfCclass.setBounds(279, 187, 261, 21);
 		getContentPane().add(tfCclass);
 		
-		tfCbend = new JTextField();
-		tfCbend.setEnabled(false);
-		tfCbend.setColumns(10);
-		tfCbend.setBounds(279, 156, 261, 21);
-		getContentPane().add(tfCbend);
+		tfCbrend = new JTextField();
+		tfCbrend.setEnabled(false);
+		tfCbrend.setColumns(10);
+		tfCbrend.setBounds(279, 156, 261, 21);
+		getContentPane().add(tfCbrend);
 		
 		tfCname = new JTextField();
 		tfCname.setEnabled(false);
@@ -265,7 +278,97 @@ public class WinRentInsert extends JDialog {
 		getContentPane().add(lblCname_6_2);
 		
 		JButton btnRentInsert = new JButton("예약 정보 등록");
+		btnRentInsert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String rid = tfId.getText();
+				String rtdate = tfRtdate.getText();
+				String returndate = tfReturndate.getText();
+				String cindex = tfCindex.getText();
+				int rtPrice = Integer.parseInt(tfPrice.getText());
+ 				try {
+					rentInsert(rid, cindex, rtdate, returndate, rtPrice);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnRentInsert.setBounds(207, 460, 121, 31);
 		getContentPane().add(btnRentInsert);
+	}
+
+	protected void rentInsert(String rid, String cindex, String rtdate, String returndate, int rtPrice) throws ParseException {
+		// TODO Auto-generated method stub
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+	        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","1234");
+				String sql = "insert into "
+						+ "   			rreservation (rtnum, rid, cindex, rtdate, returndate, rpdate, rtprice)"
+						+ "    				values (RTNUM_SEQ.nextval, ?, ?, ?, ?, ?, ?)";
+				
+				PreparedStatement pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, rid);
+				pstmt.setString(2, cindex);
+				pstmt.setString(3, rtdate);
+				pstmt.setString(4, returndate);
+				pstmt.setString(5, rtdate+"~"+returndate);
+				
+				Date formatRtdate = new SimpleDateFormat("yyyy-MM-dd").parse(rtdate);
+				Date formatReturnDate = new SimpleDateFormat("yyyy-MM-dd").parse(returndate);
+				long diffdays = ((formatReturnDate.getTime()-formatRtdate.getTime()) / 1000 )/ (24*60*60);
+				int totalPrice = (rtPrice * (int)diffdays);
+				
+				pstmt.setInt(6, totalPrice);
+				
+				int rentCheck = pstmt.executeUpdate();
+				if(rentCheck == 1) {
+					dispose(); 
+				}
+					
+				
+			}	 catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			}
+		
+	}
+
+	protected void carView(String cindex) {
+		// TODO Auto-generated method stub
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+	        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","1234");
+			
+				String sql = "SELECT * FROM cartbl where cindex = ?";
+				
+				PreparedStatement pstmt = con.prepareStatement(sql);
+				pstmt.setString(1,cindex);
+				ResultSet rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					cindex = rs.getString("cindex");
+					tfCbrend.setText(rs.getString("cbrend"));
+					tfCclass.setText(rs.getString("cclass"));
+					tfCname.setText(rs.getString("cname"));
+					tfCcolor.setText(rs.getString("ccolor"));
+					tfCoil.setText(rs.getString("coil"));
+					tfCtype.setText(rs.getString("ctype"));
+					tfPrice.setText(rs.getString("price"));
+					String cimg = rs.getString("cimg");
+					String filePath = "C:\\\\eclipse-workspace\\\\rentcarProject\\\\src\\\\rentcarProject"+cimg.replaceAll("/","\\\\\\\\");
+					tfCnote.setText(rs.getString("cnote"));
+					ImageIcon icon = new ImageIcon(filePath);
+					Image image = icon.getImage();
+					image = image.getScaledInstance(150, 200, Image.SCALE_SMOOTH);
+					icon = new ImageIcon(image);
+					lblCimg.setIcon(icon);
+				}
+				
+			}	 catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			}
+		
+		
 	}
 }
