@@ -103,9 +103,9 @@ public class WinRentList extends JDialog {
 		JButton btnJoin = new JButton("예약 등록");
 		btnJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//			WinCarInsert winCarInsert = new WinCarInsert();
-//			winCarInsert.setModal(true);
-//			winCarInsert.setVisible(true);
+			WinRentInsert winRentInsert = new WinRentInsert();
+			winRentInsert.setModal(true);
+			winRentInsert.setVisible(true);
 			DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
 			dtm2.setRowCount(0);
 			}
@@ -119,10 +119,10 @@ public class WinRentList extends JDialog {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row =tableMemberList.getSelectedRow();
-				String cindex = tableMemberList.getValueAt(row, 0).toString();
-//				WinCarUpdate winCarUpdate = new WinCarUpdate(cindex);
-//				winCarUpdate.setModal(true);
-//				winCarUpdate.setVisible(true);
+				String rtnum = tableMemberList.getValueAt(row, 0).toString();
+				WinRentUpdate winRentUpdate = new WinRentUpdate(rtnum);
+				winRentUpdate.setModal(true);
+				winRentUpdate.setVisible(true);
 				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
 				dtm2.setRowCount(0);
 				
