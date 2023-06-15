@@ -91,23 +91,19 @@ public class WinCarSearch extends JDialog {
 	        
 			
 				String sql = "select * "
-						+ "   			 from cartbl"
-						+ "        		full outer join rReservation"
-						+ "         			on cartbl.CINDEX = rreservation.cindex"
-						+ "        				 where rtdate is null or "
-						+ "        				 	returndate is null or"
-						+ "          					 rtdate NOT BETWEEN ? AND ? and"
-						+ "          					 returndate NOT BETWEEN ? AND ? and"
-						+ "								 rtdate > ? and"
-						+ "                 			 returndate < ?";
+						+ "    from cartbl "
+						+ "        left join (select * "
+						+ "    from rReservation"
+						+ "         where rtdate BETWEEN ? AND ? or"
+						+ "          					 returndate BETWEEN ? AND ?)A"
+						+ "             on cartbl.CINDEX = A.cindex"
+						+ "                where A.cindex is null" ;
 				
 				PreparedStatement pstmt = con.prepareStatement(sql);
 				pstmt.setString(1, rtdate);
 				pstmt.setString(2, returndate);
 				pstmt.setString(3, rtdate);
 				pstmt.setString(4, returndate);
-				pstmt.setString(5, rtdate);
-				pstmt.setString(6, returndate);
 				ResultSet rs = pstmt.executeQuery();
 				
 				

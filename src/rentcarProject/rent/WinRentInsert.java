@@ -1,18 +1,13 @@
 package rentcarProject.rent;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 
 
-import rentcarProject.member.WinMemberList;
 import rentcarProject.util.Win_calendar;
 
 import javax.swing.JLabel;
@@ -30,6 +25,7 @@ import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JTextArea;
+import java.time.LocalDate;
 
 public class WinRentInsert extends JDialog {
 	private JTextField tfId;
@@ -161,7 +157,10 @@ public class WinRentInsert extends JDialog {
 					calendar.setVisible(true);
 					tfRtdate.setText(calendar.getDate());
 					
+					
 					Calendar today = Calendar.getInstance();
+					System.out.println("지정날짜 :"+calendar.getDate());
+					System.out.println("오늘날짜 :"+today.getTime());
 					String sYear = Integer.toString(today.get(Calendar.YEAR));
 					if(tfRtdate.getText() !=null) {
 						btnCal2.setEnabled(true);
