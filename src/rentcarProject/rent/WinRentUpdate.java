@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -139,11 +140,17 @@ public class WinRentUpdate extends JDialog {
 					Win_calendar calendar = new Win_calendar();
 					calendar.setModal(true);
 					calendar.setVisible(true);
-					tfRtdate.setText(calendar.getDate());
 					
 					Calendar today = Calendar.getInstance();
 					String sYear = Integer.toString(today.get(Calendar.YEAR));
-					if(tfRtdate.getText() !=null) {
+					LocalDate localDate1 = LocalDate.parse(calendar.getDate());
+					LocalDate now = LocalDate.now();
+					
+					if(localDate1.isBefore(now)) {
+						JOptionPane.showMessageDialog(null, "오늘보다 이전의 날짜는 선택할수없습니다.");
+						tfRtdate.setText("");
+					}else {
+						tfRtdate.setText(calendar.getDate());
 						btnCal2.setEnabled(true);
 					}
 				}
@@ -158,11 +165,17 @@ public class WinRentUpdate extends JDialog {
 					Win_calendar calendar = new Win_calendar();
 					calendar.setModal(true);
 					calendar.setVisible(true);
-					tfReturndate.setText(calendar.getDate());
 					
 					Calendar today = Calendar.getInstance();
 					String sYear = Integer.toString(today.get(Calendar.YEAR));
-					if(tfReturndate.getText() !=null) {
+					LocalDate localDate1 = LocalDate.parse(tfRtdate.getText());
+					LocalDate localDate2 = LocalDate.parse(calendar.getDate());
+					
+					if(localDate2.isBefore(localDate1) || localDate2.equals(localDate1)) {
+						JOptionPane.showMessageDialog(null, "시작 이후의 날짜를 선택해주세요.");
+						tfReturndate.setText("");
+					}else {
+						tfReturndate.setText(calendar.getDate());
 						btnUpCar.setEnabled(true);
 					}
 				}

@@ -11,6 +11,7 @@ import javax.swing.JDialog;
 import rentcarProject.util.Win_calendar;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -26,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JTextArea;
 import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 
 public class WinRentInsert extends JDialog {
 	private JTextField tfId;
@@ -153,18 +155,21 @@ public class WinRentInsert extends JDialog {
 			btnCal1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Win_calendar calendar = new Win_calendar();
+					Calendar today = Calendar.getInstance();
 					calendar.setModal(true);
 					calendar.setVisible(true);
-					tfRtdate.setText(calendar.getDate());
 					
+					LocalDate localDate1 = LocalDate.parse(calendar.getDate());
+					LocalDate now = LocalDate.now();
 					
-					Calendar today = Calendar.getInstance();
-					System.out.println("지정날짜 :"+calendar.getDate());
-					System.out.println("오늘날짜 :"+today.getTime());
-					String sYear = Integer.toString(today.get(Calendar.YEAR));
-					if(tfRtdate.getText() !=null) {
+					if(localDate1.isBefore(now)) {
+						JOptionPane.showMessageDialog(null, "오늘보다 이전의 날짜는 선택할수없습니다.");
+						tfRtdate.setText("");
+					}else {
+						tfRtdate.setText(calendar.getDate());
 						btnCal2.setEnabled(true);
 					}
+					
 				}
 			});
 			btnCal1.setBounds(253, 39, 133, 23);
@@ -177,11 +182,19 @@ public class WinRentInsert extends JDialog {
 					Win_calendar calendar = new Win_calendar();
 					calendar.setModal(true);
 					calendar.setVisible(true);
-					tfReturndate.setText(calendar.getDate());
 					
 					Calendar today = Calendar.getInstance();
 					String sYear = Integer.toString(today.get(Calendar.YEAR));
-					if(tfReturndate.getText() !=null) {
+					
+					
+					LocalDate localDate1 = LocalDate.parse(tfRtdate.getText());
+					LocalDate localDate2 = LocalDate.parse(calendar.getDate());
+					
+					if(localDate2.isBefore(localDate1) || localDate2.equals(localDate1)) {
+						JOptionPane.showMessageDialog(null, "시작 날보다 이전의 날짜는 선택할수없습니다.");
+						tfReturndate.setText("");
+					}else {
+						tfReturndate.setText(calendar.getDate());
 						btnUpCar.setEnabled(true);
 					}
 				}

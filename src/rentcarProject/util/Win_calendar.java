@@ -259,8 +259,7 @@ public class Win_calendar extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					JButton btn1 = (JButton)e.getSource();
-					selectedDate = year + "-" + month + "-" + btn1.getText();
-					System.out.println(selectedDate);
+					selectedDate = year + "-" + (month < 10 ? "0"+month : month) + "-" + (btn1.getText().length() < 2 ? "0"+ btn1.getText() : btn1.getText());
 					dispose();
 				}
 			});
