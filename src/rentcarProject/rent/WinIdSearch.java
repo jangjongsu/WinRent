@@ -60,7 +60,6 @@ public class WinIdSearch extends JDialog {
 						setRid(table.getValueAt(row, 0).toString()); // id
 						dispose();
 					}
-					
 				}
 			});
 			scrollPane.setViewportView(table);

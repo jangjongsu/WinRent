@@ -86,11 +86,6 @@ public class WinCarUpdate extends JDialog {
 						lblCimg.setIcon(icon);
 						filePath = filePath.replaceAll("\\\\","\\\\\\\\");
 						System.out.println(filePath);
-//						String[] sfilePath = filePath.replaceAll("\\\\","/").replaceAll("//", "/").split("/");
-//						String ssfilePath = "/"+sfilePath[5]+"/"+sfilePath[6]+"/"+sfilePath[7];
-//						System.out.println(ssfilePath);
-//						String sssfilePath = "C:\\\\eclipse-workspace\\\\rentcarProject\\\\src\\\\rentcarProject"+ssfilePath.replaceAll("/","\\\\\\\\");
-//						System.out.println(sssfilePath);
 					}
 				}
 			}
