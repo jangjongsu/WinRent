@@ -198,6 +198,7 @@ public class WinCarUpdate extends JDialog {
 	        int updateCheck = pstmt.executeUpdate();
 	        if(updateCheck == 1) {
 	        	dispose();
+	        	JOptionPane.showMessageDialog(null, "차량 정보가 수정되었습니다.");
 	        }else {
 	        	JOptionPane.showMessageDialog(null, "차량 수정 실패");
 	        }

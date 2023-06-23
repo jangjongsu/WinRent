@@ -300,6 +300,10 @@ public class WinRentUpdate extends JDialog {
 			
 			Date formatRtdate = new SimpleDateFormat("yyyy-MM-dd").parse(tfRtdate.getText());
 			Date formatReturnDate = new SimpleDateFormat("yyyy-MM-dd").parse(tfReturndate.getText());
+			
+			pstmt.setString(2,tfRtdate.getText());
+		    pstmt.setString(3,tfReturndate.getText());
+		    pstmt.setString(4, tfRtdate.getText()+"~"+tfReturndate.getText());
 			long diffdays = ((formatReturnDate.getTime()-formatRtdate.getTime()) / 1000 )/ (24*60*60);
 			int totalPrice = (Integer.parseInt(tfPrice.getText()) * (int)diffdays);
 			
@@ -309,8 +313,9 @@ public class WinRentUpdate extends JDialog {
 	        int updateCheck = pstmt.executeUpdate();
 	        if(updateCheck == 1) {
 	        	dispose();
+	        	JOptionPane.showMessageDialog(null, "예약 정보가 수정되었습니다.");
 	        }else {
-	        	JOptionPane.showMessageDialog(null, "차량 수정 실패");
+	        	JOptionPane.showMessageDialog(null, "예약 수정 실패");
 	        }
 					
 			}catch (ClassNotFoundException | SQLException e1) {

@@ -26,6 +26,8 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -137,6 +139,7 @@ public class WinMemberList extends JDialog {
 				memberDelete(rid);
 				DefaultTableModel dtm2 = (DefaultTableModel)tableMemberList.getModel();
 				dtm2.setRowCount(0);
+				JOptionPane.showMessageDialog(null, "회원정보가 삭제되었습니다.");
 			}
 		});
 		popupMenu.add(btmDelete);

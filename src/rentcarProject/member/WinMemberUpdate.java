@@ -174,6 +174,7 @@ public class WinMemberUpdate extends JDialog {
 				int updateCheck = pstmt.executeUpdate();
 				if(updateCheck == 1) {
 					dispose(); 
+					JOptionPane.showMessageDialog(null, "회원가 수정 되었습니다.");
 				}else {
 					JOptionPane.showMessageDialog(null, "회원 수정 실패");
 				}

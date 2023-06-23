@@ -207,6 +207,7 @@ public class WinMemberJoin extends JDialog {
 				int joinCheck = pstmt.executeUpdate();
 				if(joinCheck == 1) {
 					dispose(); 
+					JOptionPane.showMessageDialog(null, "회원정보가 등록되었습니다.");
 				}
 					
 				

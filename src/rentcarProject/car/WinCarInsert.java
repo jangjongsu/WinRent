@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -193,6 +195,7 @@ public class WinCarInsert extends JDialog {
 				int joinCheck = pstmt.executeUpdate();
 				if(joinCheck == 1) {
 					dispose(); 
+					JOptionPane.showMessageDialog(null, "차량 정보가 등록되었습니다.");
 				}
 					
 				

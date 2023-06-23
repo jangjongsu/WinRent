@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JTextArea;
 import java.time.LocalDate;
-import java.text.SimpleDateFormat;
 
 public class WinRentInsert extends JDialog {
 	private JTextField tfId;
@@ -335,6 +334,7 @@ public class WinRentInsert extends JDialog {
 				int rentCheck = pstmt.executeUpdate();
 				if(rentCheck == 1) {
 					dispose(); 
+					JOptionPane.showMessageDialog(null, "예약 정보가 등록되었습니다.");
 				}
 					
 				
